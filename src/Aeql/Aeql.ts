@@ -2,6 +2,7 @@ import { Query } from "./Query";
 import grammar from './Grammar';
 import semantics from "./Semantics";
 import capitalism from "./util/capitalism";
+import axios from 'axios';
 
 
 type AttributeType = 'Text' | 'Int' | string
@@ -29,7 +30,6 @@ export class Aeql {
     }
 
     public interpret(inputString: string): Query {
-        console.log("processing input", inputString);
         let match = grammar.match(inputString);
         if (match.succeeded()) {
             let s = semantics(match);
@@ -39,27 +39,34 @@ export class Aeql {
         }
     }
 
-    public evaluate(q: Query): Entity[] {
-        if (this.data) {
-            return Aeql.processQuery(q, this.data)
+    public async evaluate(q: Query): Promise<Entity[]> {
+        if (q.via || this.data) {
+            let result = await Aeql.processSimpleQueryManually(q, this.data || {})
+            return result;
         } else {
             throw new Error("No data provided!")
         }
     }
 
-    public resolve(inputString: string): Entity[] {
-        return this.evaluate(this.interpret(inputString));
+    public async resolve(inputString: string): Promise<Entity[]> {
+        return await this.evaluate(this.interpret(inputString));
     }
 
-    private static processQuery(q: Query, data: Data) {
+    private static async processSimpleQueryManually(q: Query, data: Data) {
         let collectionName: string = capitalism.capitalize(
             q.subject.getName()
         )
-        console.log("LOOKUP COLLECTION", { collectionName, data });
-        let collection = data[collectionName].slice();
+        let collection: Entity[] = [];
+        if (q.via) {
+            let result = await axios.get(q.via.getUrl(), {
+                baseURL: 'https://jsonplaceholder.typicode.com'
+            })
+            collection = result.data
+        } else if (data[collectionName] && data[collectionName].length) {
+            collection = data[collectionName].slice();
+        }
         if (q.order) {
             let { order } = q
-            console.log("APPLY ORDER", { order })
             let orderName = order.getName()
             collection = collection.sort((a, b) =>
                 a[orderName] > b[orderName] ? 1 : -1

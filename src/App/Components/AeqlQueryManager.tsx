@@ -9,6 +9,11 @@ export let aeql = new Aeql({
     Human: {
       name: 'string',
       age: 'int',
+    },
+    Employee: {
+      name: 'string',
+      age: 'int',
+      salary: 'int',
     }
   },
   data: {
@@ -18,6 +23,14 @@ export let aeql = new Aeql({
       { id: 3, name: 'Jim',    age: 19 },
       { id: 4, name: 'Abel',   age: 24 },
       { id: 5, name: 'Sawyer', age: 34 },
+    ],
+    Employees: [
+      { id: 1, name: 'Rhonda', age: 47 },
+      { id: 2, name: 'Barbara-Anniston', age: 23 },
+      { id: 3, name: 'Carol Andrews', age: 35 },
+      { id: 4, name: 'Sandra Amberg', age: 42 },
+      { id: 5, name: 'Andra Saunders', age: 23 },
+      { id: 6, name: 'Exandra Calabanza', age: 68 },
     ]
   }
 });
@@ -85,7 +98,7 @@ export class AeqlQueryManager extends Component<{}, QueryState> {
   componentDidMount() {
     this.parseAeql('find humans by name')
   }
-  private parseAeql = (message: string) => {
+  private parseAeql = async (message: string) => {
     let userInput: string = message;
     if (userInput === '') {
       this.setState({ query: '', result: '' })
@@ -95,7 +108,7 @@ export class AeqlQueryManager extends Component<{}, QueryState> {
       try {
         let q: Query = aeql.interpret(userInput);
         result = `match: ${q.describe()}\n`
-        resultData = aeql.evaluate(q)
+        resultData = await aeql.evaluate(q)
       } catch (e) {
         result = e.message
       }

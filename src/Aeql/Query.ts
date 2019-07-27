@@ -32,14 +32,21 @@ export class Ordering {
     }
 }
 
+export class HttpVehicle {
+    constructor(public url: string) {}
+
+}
+
+export class Via {
+    constructor(private vehicle: HttpVehicle) {} 
+
+    getUrl(): any {
+        return this.vehicle.url
+    }
+}
+
 export class Query {
-    constructor(public subject: Subject, public order?: Ordering, public conditions?: Condition[]) {
-        console.log("CONSTRUCT QUERY",
-        {
-            subject,
-            order,
-            conditions,
-        })
+    constructor(public subject: Subject, public order?: Ordering, public conditions?: Condition[], public via?: Via) {
     }
 
     describe() {

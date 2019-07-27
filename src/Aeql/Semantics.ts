@@ -1,5 +1,5 @@
 import grammar from './Grammar';
-import { Query, Subject, Ordering, Identifier } from './Query';
+import { Query, Subject, Ordering, Identifier, Via, HttpVehicle } from './Query';
 import { Node } from 'ohm-js';
 
 const tree = {
@@ -7,21 +7,19 @@ const tree = {
     let entityTree = entity.tree()
     let queryElementsTree = elements.tree()
     let orderTree: Ordering | undefined = undefined;
-    //   orderTree = queryElementsTree;
+    let viaTree: Via | undefined = undefined;
     if (queryElementsTree instanceof Array) {
-      console.log("GOT A ARRAY HERE :(")
-      // assume query order for now??
       queryElementsTree.forEach(element => {
         if (element instanceof Ordering) {
-          if (orderTree) {
-            throw new Error("Can't have multiple orderings")
-          }
+          if (orderTree) { throw new Error("Can't have multiple orderings") }
           orderTree = element;
+        } else if (element instanceof Via) {
+          if (viaTree) { throw new Error("Can't have multiple vehicles (vias)") }
+          viaTree = element;
         }
       })
     }
-    let q = new Query(entityTree, orderTree, [])
-    console.log("QUERY TREE", { q, entityTree, elementsTree: queryElementsTree, orderTree })
+    let q = new Query(entityTree, orderTree, [], viaTree)
     return q
   },
 
@@ -29,11 +27,24 @@ const tree = {
   
   Order: (_by: Node, order: Node) => {
     let orderTree = order.tree()
-    // debugger;
     let ordering = new Ordering(orderTree)
-    console.log("ORDER TREE", { orderTree, ordering })
-    // debugger;
     return ordering;
+  },
+
+
+  Via: (_via: Node, vehicle: Node) => {
+    let theVia = new Via(vehicle.tree());
+    return theVia;
+  },
+
+  Vehicle_http: (_https: Node, url: Node, _closingParens: Node) => {
+    let theVehicle: HttpVehicle = new HttpVehicle(url.tree());
+    return theVehicle;
+
+  },
+
+  URL: (elems: Node) => {
+    return elems.sourceString
   },
 
   ident: (fst: Node, rst: Node) =>

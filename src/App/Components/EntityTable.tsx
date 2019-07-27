@@ -18,7 +18,7 @@ export const EntityTable: React.FC<{ collectionName?: string, models: Entity[] }
         {models.map(model => <tr key={model.id}><>
           {Object.entries(model).map(
             ([attr, value]) => <td key={attr}>
-              {value}
+              {!(value instanceof Object) ? value : "[object]"}
             </td>
           )}
         </>

@@ -1,4 +1,5 @@
 import Aeql from '../../Aeql'
+import { HttpVehicle } from '../../Aeql/Query';
 
 describe('Aeql', () => {
     let codd = { id: 1, name: 'Codd', age: 40 }
@@ -8,9 +9,13 @@ describe('Aeql', () => {
         personae: {
             Human: {
                 name: 'Text'
-            }
+            },
+            // User: {
+            //     name: 'Text',
+            //     username: 'Text',
+            // }
         },
-        data: { Humans: [codd, naur, backus]},
+        data: { Humans: [codd, naur, backus] },
     });
     describe("queries", () => {
         it("queries by entity", () => {
@@ -31,25 +36,38 @@ describe('Aeql', () => {
             expect(q.subject).toEqual({ name: { value: 'dinosaurs' } });
             expect(q.order).toEqual({ name: { value: 'age' }})
         })
+
+        it("queries via uri", () => {
+            let queryString: string = 'find users via https(/users)'
+            let q = aeql.interpret(queryString)
+            expect(q.subject).toEqual({ name: { value: 'users' }})
+            expect(q.via).toEqual({ vehicle: new HttpVehicle('/users') })
+        })
     });
 
     describe("resolution", () => {
-        it('finds results', () => {
-            expect(aeql.resolve('find humans')).toEqual([
-                codd,
-                naur,
-                backus
-            ])
+        it('finds results', async () => {
+            return aeql.resolve('find humans').then(res => {
+                expect(res).toEqual([
+                    codd,
+                    naur,
+                    backus
+                ])
+            })
+
+            // done()
         });
 
-        it('orders results', () => {
-            expect(aeql.resolve('find humans by name')).toEqual([
-                backus,
-                codd,
-                naur
-            ])
+        it('orders results', async () => {
+            return aeql.resolve('find humans by name').then(res => {
+              expect(res).toEqual([
+                  backus,
+                  codd,
+                  naur
+              ])
+            })
         })
- 
+
         it.skip('finds results by attributes', () => {
             expect(aeql.resolve('find humans whose name is Naur')).toEqual([
                 { id: 2, name: 'Naur' }
