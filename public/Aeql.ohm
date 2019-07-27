@@ -1,7 +1,7 @@
 Arithmetic {
   Exp
     = Query
-  Query = "find" Entity Order
+  Query = "find" Entity (Criteria | Order | Givens)*
   Givens = "given" ListOf<Given, Connective>
   Given = Alias Is Value
   Criteria = Where Conditions

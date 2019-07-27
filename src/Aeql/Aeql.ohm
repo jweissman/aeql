@@ -19,8 +19,6 @@ Arithmetic {
   GreaterThan = ">"
   Is = "is" | "are"
   
-  // Is = "eq" | "is" | 
-  
   AddExp
     = AddExp "+" MulExp  -- plus
     | AddExp "-" MulExp  -- minus

@@ -56,7 +56,7 @@ export class Aeql {
             q.subject.getName()
         )
         console.log("LOOKUP COLLECTION", { collectionName, data });
-        let collection = data[collectionName];
+        let collection = data[collectionName].slice();
         if (q.order) {
             let { order } = q
             console.log("APPLY ORDER", { order })

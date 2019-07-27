@@ -13,9 +13,11 @@ export let aeql = new Aeql({
   },
   data: {
     Humans: [
-      { id: 1, name: 'Bob', age: 23 },
-      { id: 2, name: 'Jim', age: 19 },
-      { id: 3, name: 'Abel', age: 24 },
+      { id: 1, name: 'Zeta',   age: 59 },
+      { id: 2, name: 'Bob',    age: 23 },
+      { id: 3, name: 'Jim',    age: 19 },
+      { id: 4, name: 'Abel',   age: 24 },
+      { id: 5, name: 'Sawyer', age: 34 },
     ]
   }
 });
@@ -30,6 +32,12 @@ class AeqlQueryView extends React.Component<{
     return <>
       <h3>query playground</h3>
       <p>enter your query here!</p>
+      <section style={{backgroundColor: '#e4eae9' }}>
+        <p>
+          the basic form of a query begins with <code>find...</code> or <code>get [model-or-persona-name]</code>
+        </p>
+        <p>you can order by attributes with <code>by [attribute name]</code></p>
+      </section>
       <label>
         ask aeql anything:
         &nbsp;
