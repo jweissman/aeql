@@ -1,0 +1,24 @@
+Color:
+  - red
+  - blue
+  - green
+  - brown
+  - yellow
+  - gray
+  - white
+
+HairLength:
+  - very_short
+  - short
+  - medium
+  - long
+  - very_long
+
+Username:
+  type: Text
+  ensure:
+    - unique
+    - length >= 6
+
+Name:
+  type: Text

@@ -1,0 +1,51 @@
+Arithmetic {
+  Exp
+    = Query
+  Query = "find" Entity Order
+  Givens = "given" ListOf<Given, Connective>
+  Given = Alias Is Value
+  Criteria = Where Conditions
+  Where = "whose" | "where" | "with"
+  Order = "by" Value
+  Entity = ident
+  Conditions = ListOf<Condition, Connective>
+  Condition = Attribute Is? Value
+  Connective = "and" | "or"
+  Alias = ident
+  Attribute = ident
+  Value = AddExp
+  
+  Compare = Is | GreaterThan
+  GreaterThan = ">"
+  Is = "is" | "are"
+  
+  // Is = "eq" | "is" | 
+  
+  AddExp
+    = AddExp "+" MulExp  -- plus
+    | AddExp "-" MulExp  -- minus
+    | MulExp
+
+  MulExp
+    = MulExp "*" ExpExp  -- times
+    | MulExp "/" ExpExp  -- divide
+    | ExpExp
+
+  ExpExp
+    = PriExp "^" ExpExp  -- power
+    | PriExp
+
+  PriExp
+    = "(" Exp ")"  -- paren
+    | "+" PriExp   -- pos
+    | "-" PriExp   -- neg
+    | ident
+    | number
+  
+  ident  (an identifier)
+    = letter (alnum | "_")*
+
+  number  (a number)
+    = digit* "." digit+  -- fract
+    | digit+             -- whole
+}

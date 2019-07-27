@@ -1,44 +1,48 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# AEQL
 
-## Available Scripts
+a tiny query language for humans
 
-In the project directory, you can run:
+# Synopsis
 
-### `npm start`
+- Define relational models and querying them
+- Define your schema declaratively in yaml files
+  - Human beings/roles in `personae.yml`
+  - Domain models in `models.yml` 
+  - Queries/views/logic in `algebrae.yml`
+- Query language is focused on
+  - Simplicity
+    - Favor user-defined 'attributes' to narrow resources over complicated things: `find most_liked post` where `most_liked` is defined in algebrae?)
+    - But you should also be able to do simple computations: `find companies where employees.count > average(Company.employee_count)` 
+  - Composability
+  - Naturality: `find people in toronto whose job is accountant`
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+# Ideas
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+ we think that a relational-algebraic grammar which exposes the raw power of that formalism
+            would be great but is kind of untenable
 
-### `npm test`
+            we think instead we can opt to favor composable of basic operations, and have things spelled <output>
+            
+            we think tooling that gives lots of feedback early on in the query development process is good
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+            We think that having a strong opinion about query grammar is important -- we feel like SQL suffers from ambiguity which leads to vendor fragmentation (this is also arguably a strength of the 'ecosystem' but that feels like a problem too)            </output>
+              Okay, so a "fresh start" kind of query language!
 
-### `npm run build`
+              Based on human values, and declarative specification of structures
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+              So you'll give your schema to aeql in the form of a handful of yaml files,
+              most notably the `personae.yml` in which you specify the roles of PEOPLE
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+              The idea is that queries are 'based' around people in general (or the agents,
+              systems, etc in your relations: although the idea is that personae are truly
+              people and not systems, that we're creating value for people. a simple 'user'
+              of the system resources in question...)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+              Maybe you don't have to start from people, but the idea is that there's affordances
+              and 'naturalisms' we can offer around personae that would highlight the value of doing
+              this (of doing user-centered domain modelling)
 
-### `npm run eject`
+# More ideas
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+- maybe if left undefined, `people` matches across ALL personae, even if they 
+  don't share a parent model
