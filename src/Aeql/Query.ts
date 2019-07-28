@@ -15,6 +15,11 @@ export class Identifier implements QueryElement {
 }
 
 export class Subject implements QueryElement {
+    static of(nameValue: string) {
+        return new Subject(
+            new Identifier(nameValue)
+        );
+    }
     constructor(private name: Identifier) {}
     describe() {
         return `${this.name.describe()}`;

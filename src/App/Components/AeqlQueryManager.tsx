@@ -48,7 +48,7 @@ export class AeqlQueryManager extends Component<{}, QueryState> {
       <h3>query playground</h3>
       <section className="TipsAndQuery">
       <section className="Tips" style={{ backgroundColor: '#e4eae9' }}>
-        <h3>TIPS</h3>
+        <h3>how-to</h3>
         <dl>
           <dt>QUERY FORM</dt>
           <dd>
@@ -84,8 +84,9 @@ export class AeqlQueryManager extends Component<{}, QueryState> {
         </AeqlQueryView>
       </section>
       <hr/>
+      <h4>Playground Data</h4>
       <section className='SchemaAndData'>
-        <section className='Data' style={{ backgroundColor: '#eaeaf3' }}>
+        <section className='Data'>
           {aeql.data && Object.entries(aeql.data).map(
             ([collection, models]) => <EntityTable
               key={collection}

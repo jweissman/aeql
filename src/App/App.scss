@@ -10,12 +10,12 @@ code {
   font-family: "Nunito", sans-serif;
   font-weight: light;
   text-align: center;
-  background-color: #eaeaea;
+  // background-color: #eaeaea;
   min-width: 1024px;
   // background-color: rgba(255,255,255,0.5);
-  // background: center center / 100% fixed url(
-  //  https://images.unsplash.com/photo-1562496146-d680d80e902b?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=720&ixid=eyJhcHBfaWQiOjF9&ixlib=rb-1.2.1&q=80&w=1080
-    // );
+  background: center center / 200% fixed url(
+   https://images.unsplash.com/photo-1562496146-d680d80e902b?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=720&ixid=eyJhcHBfaWQiOjF9&ixlib=rb-1.2.1&q=80&w=1080
+    );
 }
 
 .App-header {
@@ -46,7 +46,7 @@ code {
   }
   .QueryManager {
     display: flex;
-    min-width: 900px;
+    // min-width: 900px;
     
     .SchemaAndData {
       display: flex;
@@ -54,7 +54,7 @@ code {
       .Data { display: flex; flex-flow: row; }
     }
     .TipsAndQuery {
-      min-width: 700px;
+      // min-width: 700px;
       width: 100%;
       display: flex;
       flex-direction: row;
@@ -82,6 +82,20 @@ code {
   p { margin:0; padding: 4px;}
   code { font-size: 82.5%; margin-bottom: 10px }
   // padding-top: 2px;
+
+}
+
+.Welcome {
+    position: absolute;
+    // left: 0;
+    right: 0;
+    top: -20px;
+    padding: 50px;
+    margin: 50px;
+    opacity: 0.8;
+    @media only screen and (max-width : 1200px) {
+      display: none;
+    }
 }
 
 section {
@@ -103,7 +117,7 @@ table {
   font-size: 12px;
   td {
     border: 1px solid #eaeaea;
-    padding: 6px 4px;
+    padding: 6px 14px;
     font-size: 10px;
     background-color: white;
   }

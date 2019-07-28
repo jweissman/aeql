@@ -1,5 +1,5 @@
 import Aeql from '../../Aeql'
-import { HttpVehicle } from '../../Aeql/Query';
+import { HttpVehicle, Subject } from '../../Aeql/Query';
 
 describe('Aeql', () => {
     let codd = { id: 1, name: 'Codd', age: 41 }
@@ -47,8 +47,17 @@ describe('Aeql', () => {
             }])
         })
 
+        it("queries with numeric conditions", () => {
+            let qs = 'find dinosaurs whose age is 30000000'
+            let q = aeql.interpret(qs)
+            expect(q.subject).toEqual(Subject.of('dinosaur'))
+            expect(q.conditions).toEqual([{
+                attributeName: { value: 'age' },
+                attributeExpr: { value: '30000000'}
+            }]);
+        })
+
         test.todo("queries with approximate conditions")
-        test.todo("queries with numeric conditions")
         test.todo("queries with arithmetic conditions")
 
         // test.todo("queries with algebraic conditions")

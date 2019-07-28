@@ -3,6 +3,13 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App/App';
 import * as serviceWorker from './serviceWorker';
+// import Trianglify from 'trianglify';
+// var pattern = Trianglify({
+//     width: window.innerWidth,
+//     height: window.innerHeight
+// });
+// document.body.appendChild(pattern.canvas())
+
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
