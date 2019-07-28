@@ -1,5 +1,5 @@
 import React from 'react';
-import './App.css';
+import './App.scss';
 import { AeqlQueryManager } from './Components/AeqlQueryManager';
 const AeqlText = () =>  {
   return (<span className='Aeql-name' style={{ color: '#aeeaea', textShadow: '1.2px 1.2px #aeaeae', fontSize: '135%', fontWeight: 'bolder' }}>

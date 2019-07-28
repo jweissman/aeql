@@ -5,6 +5,9 @@ import './EntityTable.scss';
 
 export const EntityTable: React.FC<{ collectionName?: string, models: Entity[] }> = (props) => {
   let { models } = props;
+  if (!models.length) {
+    return <p>Nothing.</p>
+  }
   return <section className='EntityTable'> 
     <table>
       <thead>

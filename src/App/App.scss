@@ -1,0 +1,74 @@
+.App {
+  font-family: "Fira Sans", sans-serif;
+  text-align: center;
+  // background-color: #ccc;
+  background: center center / 100% fixed url(
+   https://images.unsplash.com/photo-1562496146-d680d80e902b?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=720&ixid=eyJhcHBfaWQiOjF9&ixlib=rb-1.2.1&q=80&w=1080
+    );
+
+   // https://source.unsplash.com/random/1080x720/?computer
+}
+
+.App-header {
+  // background-color: #282c34;
+  // min-height: 10vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 24px; ///calc(10px + 2vmin);
+  color: white;
+}
+
+.App-main {
+  // color: #3a4e4f;
+  // padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-left: 60px;
+  padding-right: 60px;
+  // padding: 10px;
+  /* margin: 10px; */
+  /* border: 1px solid rgba(128,128,128,0.2); */
+}
+
+section {
+  /* margin: 0 auto; */
+  /* margin-bottom: 8px; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  // align-items: center;
+  // align-self: center;
+  width: fit-content;
+  // min-width: 80vh;
+  // margin: 10px auto;
+  overflow: hide;
+  margin: 3px;
+  padding: 3px;
+  border: 1px solid #34464f;
+  border-radius: 2px;
+  // opacity: 0.1;
+  background-color: rgba(255,255,255,0.7);
+}
+
+table {
+  width: fit-content;
+  border: 1px solid #eaeaea;
+  color: #000;
+  background-color: white;
+  padding: 8px;
+  margin: 2px;
+  font-size: 11px;
+  td { border: 1px solid #eaeaea; padding: 24px; }
+}
+
+
+textarea {
+  min-width: 80%;
+  min-height: 140px;
+}
+
+dt { font-weight: bold; margin-top: 8px; }

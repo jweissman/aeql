@@ -3,10 +3,8 @@ Aeql {
     = Query
   Query = "find" Entity (Criteria | Order | Givens | Via)*
   Via = ("via" | "using") Vehicle
-  Vehicle =
-    "https(" URL ")" --http
-  URL = (~#")" any)+
-
+  Vehicle = "/" URL
+  URL = (alnum | "_" | "+" | "?" | "/")+
   Givens = "given" ListOf<Given, Connective>
   Given = Alias Is Value
   Criteria = Where Conditions
@@ -19,12 +17,10 @@ Aeql {
   Alias = ident
   Attribute = ident
   Value = AddExp
-  
   Compare = Is | GreaterThan
   GreaterThan = ">"
   Is = "is" | "are"
-  
-  AddExp
+ AddExp
     = AddExp "+" MulExp  -- plus
     | AddExp "-" MulExp  -- minus
     | MulExp

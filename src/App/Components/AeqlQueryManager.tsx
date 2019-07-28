@@ -1,134 +1,76 @@
-import React, { Component } from 'react';
+import React, { Component, TextareaHTMLAttributes } from 'react';
 import { Query } from '../../Aeql/Query';
-import Aeql from '../../Aeql';
 import { Entity } from '../../Aeql/Aeql';
 import { EntityTable } from './EntityTable';
-
-export let aeql = new Aeql({
-  personae: {
-    Human: {
-      name: 'string',
-      age: 'int',
-    },
-    Employee: {
-      name: 'string',
-      age: 'int',
-      salary: 'int',
-    }
-  },
-  data: {
-    Humans: [
-      { id: 1, name: 'Zeta',   age: 59 },
-      { id: 2, name: 'Bob',    age: 23 },
-      { id: 3, name: 'Jim',    age: 19 },
-      { id: 4, name: 'Abel',   age: 24 },
-      { id: 5, name: 'Sawyer', age: 34 },
-    ],
-    Employees: [
-      { id: 1, name: 'Rhonda', age: 47 },
-      { id: 2, name: 'Barbara-Anniston', age: 23 },
-      { id: 3, name: 'Carol Andrews', age: 35 },
-      { id: 4, name: 'Sandra Amberg', age: 42 },
-      { id: 5, name: 'Andra Saunders', age: 23 },
-      { id: 6, name: 'Exandra Calabanza', age: 68 },
-    ]
-  }
-});
-
-class AeqlQueryView extends React.Component<{
-  query: string,
-  resultData: Entity[],
-  parseAeql: Function
-}> {
-  public render() {
-    let { query, parseAeql, resultData } = this.props;
-    return <>
-      <h3>query playground</h3>
-      <p>enter your query here!</p>
-      <section style={{backgroundColor: '#e4eae9' }}>
-        <p>
-          the basic form of a query begins with <code>find...</code> or <code>get [model-or-persona-name]</code>
-        </p>
-        <p>you can order by attributes with <code>by [attribute name]</code></p>
-      </section>
-      <label>
-        ask aeql anything:
-        &nbsp;
-      <textarea
-        style={{ minWidth: '60vw', minHeight: '20vh'}}
-        id='query'
-        value={query}
-        onChange={(e)=>parseAeql(e.target.value)}
-      />
-      </label>
-      <section className='Result'>
-        {this.props.children}
-        <h3>result</h3>
-        {resultData.length &&
-            <EntityTable models={resultData} />
-        }
-      </section>
-      <section className='SchemaAndDataSet'>
-        <b>SCHEMA</b>
-        {Object.entries(aeql.personae).map(
-          ([name, persona]) => <section className='persona' key={name}>
-              <h3>Persona {name}</h3>
-              <ul>
-              {Object.entries(persona).map(
-                ([attrName, type]) => <div key={attrName}>
-                  {attrName} ({type})
-                </div>
-              )}</ul>
-            </section>
-        )}
-        </section>
-    </>
-  }
-
-}
-
+import { AeqlQueryView } from './AeqlQueryView';
+import { aeql } from '../Services/Database';
 export type QueryState = {
   query: string,
   result: string,
+  errors: string,
   resultData: Entity[]
 }
 
 export class AeqlQueryManager extends Component<{}, QueryState> {
-  state = { query: '', result: '', resultData: [] };
-  componentDidMount() {
-    this.parseAeql('find humans by name')
-  }
+  state = {
+    query: '',
+    errors: '',
+    result: '',
+    resultData: []
+  };
+
   private parseAeql = async (message: string) => {
     let userInput: string = message;
     if (userInput === '') {
       this.setState({ query: '', result: '' })
     } else {
       let result = '';
+      let errors = undefined;
       let resultData: Entity[] = [];
       try {
         let q: Query = aeql.interpret(userInput);
-        result = `match: ${q.describe()}\n`
+        result = q.describe() //`match: ${q.describe()}\n`
         resultData = await aeql.evaluate(q)
       } catch (e) {
-        result = e.message
+        errors = e.message
       }
       this.setState({
         query: userInput,
         result,
-        resultData
+        errors,
+        resultData,
       });
     }
   };
 
   public render() {
     return <>
-      <section style={{backgroundColor: '#faf4f7'}}>
+      <h3>query playground</h3>
+      <p>answer all your questions here!</p>
+      <section style={{ backgroundColor: '#e4eae9' }}>
+        <h3>TIPS</h3>
+        <dl>
+          <dt>QUERY FORM</dt>
+          <dd>the basic form of a query begins with <code>find...</code> or <code>get [model-or-persona-name]</code></dd>
+
+          <dt>ORDERING</dt>
+          <dd>you can order by attributes with <code>by [attribute name]</code></dd>
+
+          <dt>SELECTION</dt>
+          <dd>pick columns like <code>find humans whose age is 100</code></dd>
+
+          <dt>FETCHING</dt>
+          <dd>load data with <code>via https(/users)</code></dd>
+        </dl>
+      </section>
+      <section>
         <AeqlQueryView
+          initialQuery='find users via /users'
+          errors={this.state.errors}
           parseAeql={this.parseAeql}
-          query={this.state.query}
+          result={this.state.result}
           resultData={this.state.resultData}
         >
-          {this.state.result}
         </AeqlQueryView>
       </section>
       <section style={{backgroundColor: '#eaeaf3'}}>
@@ -140,6 +82,16 @@ export class AeqlQueryManager extends Component<{}, QueryState> {
             models={models}
           />
         )}
+      </section>
+      <section className='SchemaAndDataSet'>
+        <b>SCHEMA</b>
+        {Object.entries(aeql.personae).map(([name, persona]) => <section className='persona' key={name}>
+          <h3>Persona {name}</h3>
+          <ul>
+            {Object.entries(persona).map(([attrName, type]) => <div key={attrName}>
+              {attrName} ({type})
+                </div>)}</ul>
+        </section>)}
       </section>
     </>;
   }

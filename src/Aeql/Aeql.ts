@@ -1,4 +1,4 @@
-import { Query } from "./Query";
+import { Query, Condition } from "./Query";
 import grammar from './Grammar';
 import semantics from "./Semantics";
 import capitalism from "./util/capitalism";
@@ -53,6 +53,7 @@ export class Aeql {
     }
 
     private static async processSimpleQueryManually(q: Query, data: Data) {
+        console.log("PROCESS SIMPLE QUERY MANUALLY", { q })
         let collectionName: string = capitalism.capitalize(
             q.subject.getName()
         )
@@ -71,6 +72,19 @@ export class Aeql {
             collection = collection.sort((a, b) =>
                 a[orderName] > b[orderName] ? 1 : -1
             )
+        }
+        if (q.conditions) {
+            let { conditions } = q
+            conditions.forEach((condition: Condition) => {
+                let attr = condition.getAttributeName()
+                let val = condition.getValue()
+                collection = collection.filter(it => {
+                    let matches = it[attr] == val
+                    console.log({ it, matches })
+                    return !!matches
+                })
+                console.log("APPLY CONDITION", { condition, collection });
+            })
         }
         return collection;
     }
