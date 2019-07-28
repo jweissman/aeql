@@ -12,7 +12,7 @@ Aeql {
   Order = "by" Value
   Entity = ident
   Conditions = ListOf<Condition, Connective>
-  Condition = Attribute Is? Value
+  Condition = Attribute Compare? Value
   Connective = "and" | "or"
   Alias = ident
   Attribute = ident

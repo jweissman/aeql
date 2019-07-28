@@ -44,28 +44,38 @@ export class AeqlQueryManager extends Component<{}, QueryState> {
   };
 
   public render() {
-    return <>
+    return <div>
       <h3>query playground</h3>
-      <p>answer all your questions here!</p>
-      <section style={{ backgroundColor: '#e4eae9' }}>
+      <section className="TipsAndQuery">
+      <section className="Tips" style={{ backgroundColor: '#e4eae9' }}>
         <h3>TIPS</h3>
         <dl>
           <dt>QUERY FORM</dt>
-          <dd>the basic form of a query begins with <code>find...</code> or <code>get [model-or-persona-name]</code></dd>
-
+          <dd>
+            the most basic form of a query begins
+            with <code>find</code> or <code>get</code>&nbsp;
+            followed by a model name
+          </dd>
+          <code>find humans</code>
+          <hr/>
           <dt>ORDERING</dt>
-          <dd>you can order by attributes with <code>by [attribute name]</code></dd>
-
+          <dd>
+            you can order by attributes with <code>by</code>&nbsp;
+            followed by the attribute name
+          </dd>
+          <code>find employees by salary</code>
+          <hr/>
           <dt>SELECTION</dt>
-          <dd>pick columns like <code>find humans whose age is 100</code></dd>
-
+          <dd>pick columns like <code>where home is Panama</code> or <code>whose hair is blonde</code></dd>
+          <code>find humans whose age is 34</code>
+          <hr/>
           <dt>FETCHING</dt>
-          <dd>load data with <code>via https(/users)</code></dd>
+          <dd>load data with <code>via /users</code></dd>
+          <code>find users whose name is Bret via /users</code>
         </dl>
       </section>
-      <section>
         <AeqlQueryView
-          initialQuery='find users via /users'
+          initialQuery='find humans by name'
           errors={this.state.errors}
           parseAeql={this.parseAeql}
           result={this.state.result}
@@ -73,26 +83,28 @@ export class AeqlQueryManager extends Component<{}, QueryState> {
         >
         </AeqlQueryView>
       </section>
-      <section style={{backgroundColor: '#eaeaf3'}}>
-        <b>DATA</b>
-        {aeql.data && Object.entries(aeql.data).map(
-          ([collection, models]) => <EntityTable
-            key={collection}
-            collectionName={collection}
-            models={models}
-          />
-        )}
+      <hr/>
+      <section className='SchemaAndData'>
+        <section className='Data' style={{ backgroundColor: '#eaeaf3' }}>
+          {aeql.data && Object.entries(aeql.data).map(
+            ([collection, models]) => <EntityTable
+              key={collection}
+              collectionName={collection}
+              models={models}
+            />
+          )}
+        </section>
+        <section className='Schema'>
+          <b>SCHEMA</b>
+          {Object.entries(aeql.personae).map(([name, persona]) => <section className='persona' key={name}>
+            <h3>Persona {name}</h3>
+            <div>
+              {Object.entries(persona).map(([attrName, type]) => <div key={attrName}>
+                {attrName} ({type})
+                </div>)}</div>
+          </section>)}
+        </section>
       </section>
-      <section className='SchemaAndDataSet'>
-        <b>SCHEMA</b>
-        {Object.entries(aeql.personae).map(([name, persona]) => <section className='persona' key={name}>
-          <h3>Persona {name}</h3>
-          <ul>
-            {Object.entries(persona).map(([attrName, type]) => <div key={attrName}>
-              {attrName} ({type})
-                </div>)}</ul>
-        </section>)}
-      </section>
-    </>;
+    </div>;
   }
 }

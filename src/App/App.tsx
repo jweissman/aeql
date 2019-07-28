@@ -11,26 +11,31 @@ const App: React.FC = () => {
   return (
     <div className="App">
       <header className="App-header">
-        hello aeql
+        <h1>aeql-lang</h1>
       </header>
-      <main className="App-main">
-        <section className='Welcome' style={{ backgroundColor: '#fafaf3'}}>
-          <h1>let's learn all about <AeqlText />!</h1>
-          <p><AeqlText/>: it's a tiny query language</p>
-          <pre>find humans by name</pre>
-          {/* <pre>get count(employees), sum(employees.salary) by department</pre> */}
-          {/* <pre>find all dinosaurs by average(fossils.date)</pre> */}
-          <p>
-            <AeqlText/> emphasizes human values, encouraging the description
-            of personae in the system
-          </p>
-          {/* <pre>find employees by name whose job is accountant</pre> */}
-        </section>
+      <div className="App-wrapper">
+        <main className="App-main">
+          <section className='Welcome Card' style={{ backgroundColor: '#fafaf3' }}>
+            <h1>let's learn all about <AeqlText />!</h1>
+            <p><AeqlText />: it's a tiny query language!</p>
+            <code>find humans by name</code>
+            <p>
+              <AeqlText /> emphasizes human values, encouraging the description
+              of personae in the system
+            </p>
+            <code>find humans where name is Bret</code>
+            {/* <code>find employees by name whose job is accountant</code> */}
+            <p>
+              <AeqlText /> wants to be a good enough query language for humans!
+            </p>
+            <code>find humans who are awesome</code>
+          </section>
 
-        <section className='QueryManager'>
-          <AeqlQueryManager />
-        </section>
-      </main>
+          <section className='QueryManager Card'>
+            <AeqlQueryManager />
+          </section>
+        </main>
+      </div>
     </div>
   );
 }

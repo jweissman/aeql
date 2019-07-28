@@ -9,6 +9,7 @@ export const EntityTable: React.FC<{ collectionName?: string, models: Entity[] }
     return <p>Nothing.</p>
   }
   return <section className='EntityTable'> 
+    <h3>{props.collectionName}</h3>
     <table>
       <thead>
         <tr>

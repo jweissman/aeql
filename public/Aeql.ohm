@@ -19,7 +19,13 @@ Aeql {
   Value = AddExp
   Compare = Is | GreaterThan
   GreaterThan = ">"
+  //NaturalComparator = Is
+   //                 | IsOver
+
   Is = "is" | "are"
+  // IsOver = "is over" | "is greater than"
+  // IsUnder = "is under" | "is less than"
+
  AddExp
     = AddExp "+" MulExp  -- plus
     | AddExp "-" MulExp  -- minus

@@ -34,20 +34,19 @@ export class AeqlQueryView extends React.Component<QueryViewProps> {
   }
   public render() {
     let { resultData } = this.props;
-    return <>
+    return <div className='AeqlQuery'>
       <label>
-        ask aeql anything:
-        &nbsp;
       <textarea id='query' ref={this.textarea} defaultValue={this.props.initialQuery || 'find humans'} />
       </label>
-      {this.props.errors && <section style={{ minWidth: '100%'}}>
-      <div style={{textAlign: 'justify', whiteSpace: 'pre-wrap'}}>{this.props.errors.split("\n").map(error => <p key={error}><code>{error}</code></p>)}</div>
-        </section>}
-      <section className='Result' style={{backgroundColor: '#eaeaea'}}>
-        {/* {this.props.children} */}
+      <section className='Result'>
         <h3>{this.props.result}</h3>
-        {resultData instanceof Object && <EntityTable models={resultData} />}
+        {this.props.errors && 
+          <div style={{ textAlign: 'justify', whiteSpace: 'pre-wrap' }}>
+            {this.props.errors.split("\n").map(error => <p key={error}><code>{error}</code></p>)}
+          </div> ||
+
+        resultData instanceof Object && <EntityTable models={resultData} />}
       </section>
-    </>;
+    </div>;
   }
 }

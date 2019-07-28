@@ -19,6 +19,7 @@ const tree = {
           viaTree = element;
         } else if (element instanceof Array && element.length && 
             element[0] instanceof Condition) { 
+          if (conditionsTree.length) { throw new Error("Can't have multiple conditions") }
               // presume all conditions?
               conditionsTree = element;
         }

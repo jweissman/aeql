@@ -37,7 +37,7 @@ describe('Aeql', () => {
             expect(q.order).toEqual({ name: { value: 'age' }})
         })
 
-        it("queries with conditions", () => {
+        it("queries with string conditions", () => {
             let queryString: string = 'find dinosaurs whose name is fred'
             let q = aeql.interpret(queryString)
             expect(q.subject).toEqual({ name: { value: 'dinosaurs' } });
@@ -47,49 +47,51 @@ describe('Aeql', () => {
             }])
         })
 
+        test.todo("queries with approximate conditions")
+        test.todo("queries with numeric conditions")
+        test.todo("queries with arithmetic conditions")
+
+        // test.todo("queries with algebraic conditions")
+        // test.todo("queries with logical conditions")
+        // test.todo("queries with categoreal conditions")
+
         it("queries via uri", () => {
             let queryString: string = 'find users via /users'
             let q = aeql.interpret(queryString)
             expect(q.subject).toEqual({ name: { value: 'users' }})
             expect(q.via).toEqual({ vehicle: new HttpVehicle('/users') })
         })
+
+        test.todo('queries with joins')
     });
 
     describe("resolution", () => {
         it('finds results', async () => {
-            return aeql.resolve('find humans').then(res => {
-                expect(res).toEqual([
-                    codd,
-                    naur,
-                    backus
-                ])
-            })
-
-            // done()
+            const res = await aeql.resolve('find humans');
+            expect(res).toEqual([
+                codd,
+                naur,
+                backus
+            ]);
         });
 
         it('orders results', async () => {
-            return aeql.resolve('find humans by name').then(res => {
-              expect(res).toEqual([
-                  backus,
-                  codd,
-                  naur
-              ])
-            })
+            const res = await aeql.resolve('find humans by name');
+            expect(res).toEqual([
+                backus,
+                codd,
+                naur
+            ]);
         })
 
-        it('selects results by attributes', () => {
-            return aeql.resolve('find humans whose name is Naur').then(res => {
-                expect(res).toEqual([{ id: 2, age: 34, name: 'Naur' }])
-            });
+        it('selects results by attributes', async () => {
+            const res = await aeql.resolve('find humans whose name is Naur');
+            expect(res).toEqual([{ id: 2, age: 34, name: 'Naur' }]);
         })
 
-        it.skip('selects results by criteria', () => {
-            return aeql.resolve('find humans whose age is over 40').then(res => {
-            //expect(aeql.resolve('find humans whose age is over 40')).toEqual([
-                expect(res).toEqual({ name: 'Codd' })
-            // ])
-            })
+        it.skip('selects results by complex criteria', async () => {
+            const res = await aeql.resolve('find humans whose age is over 40');
+            expect(res).toEqual({ name: 'Codd' });
         })
     })
 
