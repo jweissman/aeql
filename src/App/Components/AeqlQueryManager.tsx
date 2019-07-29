@@ -4,6 +4,7 @@ import { Entity } from '../../Aeql/Aeql';
 import { EntityTable } from './EntityTable';
 import { AeqlQueryView } from './AeqlQueryView';
 import { aeql } from '../Services/Database';
+import { HowTo } from './HowTo';
 export type QueryState = {
   query: string,
   result: string,
@@ -47,33 +48,8 @@ export class AeqlQueryManager extends Component<{}, QueryState> {
     return <div>
       <h3>query playground</h3>
       <section className="TipsAndQuery">
-      <section className="Tips" style={{ backgroundColor: '#e4eae9' }}>
-        <h3>how-to</h3>
-        <dl>
-          <dt>QUERY FORM</dt>
-          <dd>
-            the most basic form of a query begins
-            with <code>find</code> or <code>get</code>&nbsp;
-            followed by a model name
-          </dd>
-          <code>find humans</code>
-          <hr/>
-          <dt>ORDERING</dt>
-          <dd>
-            you can order by attributes with <code>by</code>&nbsp;
-            followed by the attribute name
-          </dd>
-          <code>find employees by salary</code>
-          <hr/>
-          <dt>SELECTION</dt>
-          <dd>pick columns like <code>where home is Panama</code> or <code>whose hair is blonde</code></dd>
-          <code>find humans whose age is 34</code>
-          <hr/>
-          <dt>FETCHING</dt>
-          <dd>load data with <code>via /users</code></dd>
-          <code>find users whose name is Bret via /users</code>
-        </dl>
-      </section>
+        <HowTo />
+
         <AeqlQueryView
           initialQuery='find humans by name'
           errors={this.state.errors}

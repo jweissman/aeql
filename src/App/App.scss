@@ -5,20 +5,23 @@ code {
   font-family: "Inconsolata" !important;
 }
 
-
 .App {
   font-family: "Nunito", sans-serif;
   font-weight: light;
   text-align: center;
-  // background-color: #eaeaea;
   min-width: 1024px;
-  // background-color: rgba(255,255,255,0.5);
-  background: center center / 200% fixed url(
-   https://images.unsplash.com/photo-1562496146-d680d80e902b?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=720&ixid=eyJhcHBfaWQiOjF9&ixlib=rb-1.2.1&q=80&w=1080
-    );
+  background-color: #eaeaea;
+  @include horizontalGradient(
+    $java,
+    $sin,
+  )
 }
 
 .App-header {
+  z-index: 1;
+  position: sticky;
+  top: 0;
+  border-bottom: 1px solid $outer-space;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -91,8 +94,8 @@ code {
     right: 0;
     top: -20px;
     padding: 50px;
-    margin: 50px;
-    opacity: 0.8;
+    margin: 80px;
+    opacity: 0.98;
     @media only screen and (max-width : 1200px) {
       display: none;
     }
@@ -106,17 +109,18 @@ section {
   margin: 18px;
   margin-top: 5px;
   border-radius: 2px;
-  background-color: rgba(255,255,255,0.7);
+  background-color: rgba(255,255,255,0.6);
 }
 
 table {
-  border: 1px solid #eaeaea;
+  border: 1px solid $gallery;
   color: #000;
-  background-color: #fafefa;
+  margin: 0 auto;
+  background-color: lighten($moon-glow, 5%);
   padding: 1px;
   font-size: 12px;
   td {
-    border: 1px solid #eaeaea;
+    border: 1px solid $gallery;
     padding: 6px 14px;
     font-size: 10px;
     background-color: white;

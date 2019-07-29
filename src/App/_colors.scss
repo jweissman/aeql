@@ -1,2 +1,10 @@
 $gallery: #eaeaea;
 $outer-space: #2d383a;
+$moon-glow: #fcfeda;
+$coffee-bean: #2a140e;
+$java: #1fc2c2;
+$sin: #FFB31F;
+
+@mixin horizontalGradient($top: $java, $bottom: $sin) {
+  background: linear-gradient(0deg, $bottom 0%, $top 100%);
+}

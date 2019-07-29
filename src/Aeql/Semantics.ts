@@ -1,5 +1,5 @@
 import grammar from './Grammar';
-import { Query, Subject, Condition, Ordering, Identifier, Via, HttpVehicle } from './Query';
+import { Query, Subject, Condition, Ordering, Identifier as Identifier, Via, HttpVehicle, IntegerLiteral } from './Query';
 import { Node } from 'ohm-js';
 
 const tree = {
@@ -29,23 +29,22 @@ const tree = {
     return q
   },
 
-  Entity: (id: Node) => new Subject(id.tree()),
-
-  Criteria: (_where: Node, conditions: Node) => {
-    console.log("CRITERIA", conditions.tree())
-    return conditions.tree();
+  Entity_simple: (id: Node) => new Subject(id.tree()),
+  Entity_projection: (id: Node, _of: Node, projects: Node) => {
+    let proj = new Subject(
+      projects.tree(),
+      id.tree(),
+    )
+    console.log("PROJ", proj)
+    return proj
   },
 
-  Conditions: (conditions: Node) => {
-    // let theConditions = conditions.children.map(condition => condition.tree())
-    // console.log("CONDITIONS", { theConditions })
-    return conditions.tree();
-  },
+  Criteria: (_where: Node, conditions: Node) => conditions.tree(),
 
-  Condition: (attribute: Node, is: Node, value: Node) => {
-    console.log("CONDITION", { attrTree: attribute.tree(), valTree: value.tree() })
-    return new Condition(attribute.tree(), value.tree());
-  },
+  Conditions: (conditions: Node) => conditions.tree(),
+
+  Condition: (attribute: Node, is: Node, value: Node) =>
+    new Condition(attribute.tree(), value.tree()),
   
   Order: (_by: Node, order: Node) => {
     let orderTree = order.tree()
@@ -75,6 +74,9 @@ const tree = {
 
   nonemptyListOf: (eFirst: Node, _sep: any, eRest: Node) =>
     [eFirst.tree(), ...eRest.tree()],
+
+  number_whole: (digits: Node) =>
+    new IntegerLiteral(Number(digits.sourceString)),
 
   ident: (fst: Node, rst: Node) =>
     new Identifier(fst.sourceString + rst.sourceString),

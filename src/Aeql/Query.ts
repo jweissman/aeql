@@ -14,18 +14,51 @@ export class Identifier implements QueryElement {
     }
 }
 
+export class IntegerLiteral implements QueryElement {
+    constructor(private value: number) {}
+    describe() { return this.value.toString(); }
+    getValue() { return this.value; }
+}
+
 export class Subject implements QueryElement {
     static of(nameValue: string) {
         return new Subject(
             new Identifier(nameValue)
         );
     }
-    constructor(private name: Identifier) {}
-    describe() {
-        return `${this.name.describe()}`;
+
+    static project(nameValue: string, projectValues: string[]) {
+        return new Subject(
+            new Identifier(nameValue),
+            projectValues.map(project => new Identifier(project)),
+        )
     }
+
+    constructor(
+        private name: Identifier,
+        private projections: Identifier[] = []
+    ) { }
+
+    isProjected() {
+        return !!this.projections.length;
+    }
+
+    describe() {
+        if (this.projections.length) {
+            return this.projections.map(project => project.describe()).join(", ")
+                + ` of ${this.name.describe()}`;
+
+        } else {
+            return this.name.describe();
+        }
+    }
+
     getName() { 
         return this.name.getValue();
+    }
+
+    getProjects() {
+        return this.projections;
     }
 }
 

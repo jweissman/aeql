@@ -1,32 +1,35 @@
 Aeql {
   Exp
     = Query
-  Query = "find" Entity (Criteria | Order | Givens | Via)*
+  Query = Find Entity (Criteria | Order | Givens | Via)*
+  Find = "find" | "get"
+
   Via = ("via" | "using") Vehicle
   Vehicle = "/" URL
   URL = (alnum | "_" | "+" | "?" | "/")+
+
   Givens = "given" ListOf<Given, Connective>
   Given = Alias Is Value
   Criteria = Where Conditions
   Where = "whose" | "where" | "with"
   Order = "by" Value
-  Entity = ident
+  Entity = ListOf<ident, ","> Of ident -- projection
+            | ident -- simple
+  Of = "of" | "from"
   Conditions = ListOf<Condition, Connective>
-  Condition = Attribute Is? Value
+  Condition = Attribute Compare? Value
   Connective = "and" | "or"
   Alias = ident
   Attribute = ident
   Value = AddExp
-  Compare = Is | GreaterThan
-  GreaterThan = ">"
-  //NaturalComparator = Is
-   //                 | IsOver
+  Compare = Is
+          // | GreaterThan
+          // | LessThan
+  // // GreaterThan = "is greater than" | "is over"  | ">"
+  // LessThan    = "is less than"    | "is under" | "<"
+  Is = "is" //| "are" | "eq" | "=="
 
-  Is = "is" | "are"
-  // IsOver = "is over" | "is greater than"
-  // IsUnder = "is under" | "is less than"
-
- AddExp
+  AddExp
     = AddExp "+" MulExp  -- plus
     | AddExp "-" MulExp  -- minus
     | MulExp

@@ -3,6 +3,7 @@ import grammar from './Grammar';
 import semantics from "./Semantics";
 import capitalism from "./util/capitalism";
 import axios from 'axios';
+import { tsMappedType } from "@babel/types";
 
 
 type AttributeType = 'Text' | 'Int' | string
@@ -57,7 +58,7 @@ export class Aeql {
         let collectionName: string = capitalism.capitalize(
             q.subject.getName()
         )
-        let collection: Entity[] = [];
+        let collection: { id: number, [key: string]: any }[] = [];
         if (q.via) {
             let result = await axios.get(q.via.getUrl(), {
                 baseURL: 'https://jsonplaceholder.typicode.com'
@@ -85,6 +86,20 @@ export class Aeql {
                 })
                 console.log("APPLY CONDITION", { condition, collection });
             })
+        }
+        if (q.subject.isProjected()) {
+            collection = collection.map(it => {
+                let projection: { id: number, [ key: string ]: any } = {
+                    id: it.id
+                };
+                q.subject.getProjects().forEach(project => {
+                    let val: string = project.getValue();
+                    projection[val] = it[val];
+                })
+                console.log("PROJECTED", { it, projection })
+                return projection;
+            })
+            // q.subject.getProjections()
         }
         return collection;
     }

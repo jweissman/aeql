@@ -21,26 +21,26 @@ describe('Aeql', () => {
         it("queries by entity", () => {
             let queryString: string = 'find humans'
             let q = aeql.interpret(queryString)
-            expect(q.subject).toEqual({ name: { value: 'humans' } });
+            expect(q.subject).toEqual(Subject.of('humans'))
         })
 
         it("queries by dinosaurs", () => {
             let queryString: string = 'find dinosaurs'
             let q = aeql.interpret(queryString)
-            expect(q.subject).toEqual({ name: { value: 'dinosaurs' } });
+            expect(q.subject).toEqual(Subject.of('dinosaurs'))
         })
 
         it("queries with orders", () => {
             let queryString: string = 'find dinosaurs by age'
             let q = aeql.interpret(queryString)
-            expect(q.subject).toEqual({ name: { value: 'dinosaurs' } });
+            expect(q.subject).toEqual(Subject.of('dinosaurs'))
             expect(q.order).toEqual({ name: { value: 'age' }})
         })
 
         it("queries with string conditions", () => {
             let queryString: string = 'find dinosaurs whose name is fred'
             let q = aeql.interpret(queryString)
-            expect(q.subject).toEqual({ name: { value: 'dinosaurs' } });
+            expect(q.subject).toEqual(Subject.of('dinosaurs'))
             expect(q.conditions).toEqual([{ 
                 attributeName: { value: 'name' },
                 attributeExpr: { value: 'fred' }
@@ -50,11 +50,17 @@ describe('Aeql', () => {
         it("queries with numeric conditions", () => {
             let qs = 'find dinosaurs whose age is 30000000'
             let q = aeql.interpret(qs)
-            expect(q.subject).toEqual(Subject.of('dinosaur'))
+            expect(q.subject).toEqual(Subject.of('dinosaurs'))
             expect(q.conditions).toEqual([{
                 attributeName: { value: 'age' },
-                attributeExpr: { value: '30000000'}
+                attributeExpr: { value: 30000000 },
             }]);
+        })
+
+        it("queries with projections", () => {
+            let qs = 'get name from employees'
+            let q = aeql.interpret(qs)
+            expect(q.subject).toEqual(Subject.project('employees', ['name']))
         })
 
         test.todo("queries with approximate conditions")
@@ -67,7 +73,7 @@ describe('Aeql', () => {
         it("queries via uri", () => {
             let queryString: string = 'find users via /users'
             let q = aeql.interpret(queryString)
-            expect(q.subject).toEqual({ name: { value: 'users' }})
+            expect(q.subject).toEqual(Subject.of('users'))
             expect(q.via).toEqual({ vehicle: new HttpVehicle('/users') })
         })
 
@@ -97,6 +103,13 @@ describe('Aeql', () => {
             const res = await aeql.resolve('find humans whose name is Naur');
             expect(res).toEqual([{ id: 2, age: 34, name: 'Naur' }]);
         })
+
+        it('projects results by attributes', async () => {
+            const res = await aeql.resolve('find name of humans whose age is 34');
+            expect(res).toEqual([{ id: 2, name: 'Naur' }]);
+        })
+
+
 
         it.skip('selects results by complex criteria', async () => {
             const res = await aeql.resolve('find humans whose age is over 40');
