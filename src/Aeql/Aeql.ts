@@ -3,6 +3,7 @@ import grammar from './Grammar';
 import semantics from "./Semantics";
 import capitalism from "./util/capitalism";
 import axios from 'axios';
+import pluralize from 'pluralize';
 
 type AttributeType = 'Text' | 'Int' | 'Id' // | string
 
@@ -71,51 +72,59 @@ export class Aeql {
             firstCollectionId.getValue()
         )
         if (data[collectionName] && data[collectionName].length) {
-            collection = data[collectionName].slice();
+            collection = data[collectionName].slice().map(a => ({ ...a }))
         }
         if (q.subject.getResources().length === 1) {
             // okay, collection is fine!
         } else {
-                    console.log("JOINERY!!", { q })
-            // okay, now join those other tables
             q.subject.getResources().forEach((resourceId: Identifier) => {
                 if (resourceId !== firstCollectionId) {
-                    // if we share a natural join column, or one that 'looks' like it?
                     let resourceName = capitalism.capitalize(
                         resourceId.getValue()
                     )
                     if (data[resourceName] && data[resourceName].length) {
-                        let resource = data[resourceName].slice();
+                        let resource = data[resourceName].slice().map(a => ({ ...a }))
                         if (resource.length) {
                             let allResourceAttrs = Object.keys(resource[0])
-                            // check for join FROM there first...
+                            let allModelAttrs = Object.keys(collection[0])
+                            let belongToKey = pluralize.singular(
+                                capitalism.downcase(collectionName)
+                            ) + "_id"
+                            let hasOneKey = pluralize.singular(
+                                capitalism.downcase(resourceName)
+                            ) + "_id"
+
                             let belongingAttribute = allResourceAttrs.find(attr =>
-                                attr === `${collectionName}_id`
+                                attr === belongToKey
+                            ) || ''
+                            let hasOneAttribute = allModelAttrs.find(attr =>
+                                attr === hasOneKey
                             ) || ''
 
-                            if (belongingAttribute) {
-                                collection = collection.map(it => {
+                            if (belongingAttribute || hasOneAttribute) {
+                                collection = collection.flatMap(it => {
                                     let matchingResource = {}
                                     if (it.id) {
-                                        // find matching resource...!
                                         let res = resource.find(otherIt =>
-                                            otherIt[belongingAttribute] === it.id
+                                            belongingAttribute && otherIt[belongingAttribute] === it.id ||
+                                            hasOneAttribute && it[hasOneAttribute] == otherIt.id
                                         )
                                         if (res) {
-                                            matchingResource = res;
+                                            matchingResource = Object.assign({}, res);
+                                            // @ts-ignore
+                                            delete matchingResource[belongingAttribute];
+                                            // @ts-ignore
+                                            delete matchingResource[hasOneAttribute];
+                                            let item = Object.assign({}, it)
+                                            return Object.assign(item, matchingResource)
                                         }
                                     }
-                                    return Object.assign(it, matchingResource)
-                                })
+                                }).flat().filter(el => el !== undefined)
                             }
                         }
                     }
-
-                    //collection.
                 }
             })
-
-            // throw new Error("PROCESS SIMPLE QUERY -- Join not implemented!")
         }
 
         if (q.via) {

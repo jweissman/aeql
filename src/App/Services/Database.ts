@@ -17,7 +17,7 @@ export let aeql = new Aeql({
   },
   models: {
     Department: {
-      name: 'Text',
+      area: 'Text',
     }
   },
   data: {
@@ -37,9 +37,9 @@ export let aeql = new Aeql({
       { id: 6, name: 'Exandra Calabanza', department_id: 3, employee_number: 1, age: 68, salary: 12000 },
     ],
     Departments: [
-      { id: 1, name: 'Finance' },
-      { id: 2, name: 'Human Resources' },
-      { id: 3, name: 'Logistics' },
+      { id: 1, area: 'Finance' },
+      { id: 2, area: 'Human Resources' },
+      { id: 3, area: 'Logistics' },
     ]
   }
 });

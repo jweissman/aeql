@@ -26,7 +26,11 @@ export const HowTo: React.FC = () => <section className="Tips" style={{ backgrou
         <code>find name, salary of employees where age is 47</code>
         <hr/>
         <dt>FETCHING</dt>
-        <dd>load data with <code>via /users</code></dd>
+        <dd>load data with <code>via</code> followed by the path</dd>
         <code>find users whose name is Bret via /users</code>
+        <hr/>
+        <dt>JOINING</dt>
+        <dd>meld table data together with <code>find ... and ...`</code></dd>
+        <code>find employees and departments</code>
     </dl>
 </section> 

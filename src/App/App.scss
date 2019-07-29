@@ -62,7 +62,10 @@ code {
       display: flex;
       flex-direction: row;
       align-items: flex-start;
-      .Tips { width: 200px; padding: 2px; }
+      .Tips {
+        width: 200px; padding: 2px;
+        flex-flow: grid;
+      }
       .AeqlQuery {
         width: 100%;
         display: flex;

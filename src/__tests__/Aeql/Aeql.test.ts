@@ -23,7 +23,10 @@ describe('Aeql', () => {
         },
         data: {
             Humans: [codd, naur, backus],
-            Experiments: [ {id: 1, subject: 'Database Science', human_id: 1} ],
+            Experiments: [
+                {id: 1, subject: 'Database Science', human_id: 1},
+                {id: 2, subject: 'Abstract Algebrae', human_id: 1}
+            ],
         },
     });
     describe("queries", () => {
@@ -126,9 +129,15 @@ describe('Aeql', () => {
             expect(res).toEqual([{ id: 2, name: 'Naur' }]);
         })
 
-        it.skip('naturally joins', async () => {
-            const res = await aeql.resolve('find humans and experiments');
+        it('naturally joins', async () => {
+            let res = await aeql.resolve('find humans and experiments');
             expect(res).toEqual([{ id: 1, name: 'Codd', age: 41, subject: 'Database Science' }]);
+
+            res = await aeql.resolve('find experiments and humans');
+            expect(res).toEqual([
+                { id: 1, human_id: 1, name: 'Codd', age: 41, subject: 'Database Science' },
+                { id: 1, human_id: 1, name: 'Codd', age: 41, subject: 'Abstract Algebrae' },
+            ]);
         })
 
         it.skip('selects results by complex criteria', async () => {
