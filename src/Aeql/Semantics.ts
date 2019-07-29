@@ -39,6 +39,8 @@ const tree = {
     return proj
   },
 
+  // Resource_join: (first: Node, _and)
+
   Criteria: (_where: Node, conditions: Node) => conditions.tree(),
 
   Conditions: (conditions: Node) => conditions.tree(),

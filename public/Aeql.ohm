@@ -13,8 +13,10 @@ Aeql {
   Criteria = Where Conditions
   Where = "whose" | "where" | "with"
   Order = "by" Value
-  Entity = ListOf<ident, ","> Of ident -- projection
-            | ident -- simple
+  Resource = ListOf<ident, "and"> -- join
+  			   | ident -- basic
+  Entity = ListOf<ident, ","> Of Resource -- projection
+         | Resource -- simple
   Of = "of" | "from"
   Conditions = ListOf<Condition, Connective>
   Condition = Attribute Compare? Value

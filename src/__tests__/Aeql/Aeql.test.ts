@@ -15,7 +15,16 @@ describe('Aeql', () => {
             //     username: 'Text',
             // }
         },
-        data: { Humans: [codd, naur, backus] },
+        models: {
+            Experiment: {
+                subject: 'Text',
+                human_id: 'Id',
+            }
+        },
+        data: {
+            Humans: [codd, naur, backus],
+            Experiments: [ {id: 1, subject: 'Database Science', human_id: 1} ],
+        },
     });
     describe("queries", () => {
         it("queries by entity", () => {
@@ -61,6 +70,14 @@ describe('Aeql', () => {
             let qs = 'get name from employees'
             let q = aeql.interpret(qs)
             expect(q.subject).toEqual(Subject.project('employees', ['name']))
+        })
+        
+        it("joins", () => {
+            let qs = 'get employees and departments'
+            let q = aeql.interpret(qs)
+            expect(q.subject).toEqual(
+                Subject.join('employees', 'departments')
+            )
         })
 
         test.todo("queries with approximate conditions")
@@ -109,7 +126,10 @@ describe('Aeql', () => {
             expect(res).toEqual([{ id: 2, name: 'Naur' }]);
         })
 
-
+        it.skip('naturally joins', async () => {
+            const res = await aeql.resolve('find humans and experiments');
+            expect(res).toEqual([{ id: 1, name: 'Codd', age: 41, subject: 'Database Science' }]);
+        })
 
         it.skip('selects results by complex criteria', async () => {
             const res = await aeql.resolve('find humans whose age is over 40');

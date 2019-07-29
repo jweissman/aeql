@@ -17,7 +17,7 @@ const App: React.FC = () => {
         <div className="App-wrapper">
           <main className="App-main">
             <section className='Welcome Card' style={{ backgroundColor: '#fafaf3' }}>
-              <h1>let's learn all about <AeqlText />!</h1>
+              <h4>let's learn all about <AeqlText />!</h4>
               <ul>
                 <li>naturalism</li>
                 <li>human values</li>

@@ -72,14 +72,26 @@ export class AeqlQueryManager extends Component<{}, QueryState> {
           )}
         </section>
         <section className='Schema'>
-          <b>SCHEMA</b>
-          {Object.entries(aeql.personae).map(([name, persona]) => <section className='persona' key={name}>
-            <h3>Persona {name}</h3>
+          <i>SCHEMA</i>
+          <h3>PERSONAE</h3>
+
+          {aeql.personae && Object.entries(aeql.personae).map(([name, persona]) => <section className='persona' key={name}>
+            <h5>Persona {name}</h5>
             <div>
               {Object.entries(persona).map(([attrName, type]) => <div key={attrName}>
                 {attrName} ({type})
                 </div>)}</div>
           </section>)}
+          <h3>MODELS</h3>
+
+          {aeql.models && Object.entries(aeql.models).map(([name, model]) => <section className='models' key={name}>
+            <h5>Model {name}</h5>
+            <div>
+              {Object.entries(model).map(([attrName, type]) => <div key={attrName}>
+                {attrName} ({type})
+                </div>)}</div>
+          </section>)}
+
         </section>
       </section>
     </div>;

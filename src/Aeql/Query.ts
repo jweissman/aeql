@@ -23,19 +23,25 @@ export class IntegerLiteral implements QueryElement {
 export class Subject implements QueryElement {
     static of(nameValue: string) {
         return new Subject(
-            new Identifier(nameValue)
+            [ new Identifier(nameValue) ]
         );
     }
 
     static project(nameValue: string, projectValues: string[]) {
         return new Subject(
-            new Identifier(nameValue),
+            [ new Identifier(nameValue) ],
             projectValues.map(project => new Identifier(project)),
         )
     }
 
+    static join(...resourceNames: string[]) {
+        return new Subject(
+            resourceNames.map(resourceName => new Identifier(resourceName))
+        );
+    }
+
     constructor(
-        private name: Identifier,
+        private resources: Identifier[] = [],
         private projections: Identifier[] = []
     ) { }
 
@@ -44,17 +50,19 @@ export class Subject implements QueryElement {
     }
 
     describe() {
+        let resourceDescription = this.resources.map(res => res.getValue()).join(' and ');
+
         if (this.projections.length) {
             return this.projections.map(project => project.describe()).join(", ")
-                + ` of ${this.name.describe()}`;
+                + ` of ${resourceDescription}`;
 
         } else {
-            return this.name.describe();
+            return resourceDescription;
         }
     }
 
-    getName() { 
-        return this.name.getValue();
+    getResources() {
+        return this.resources;
     }
 
     getProjects() {
