@@ -27,7 +27,7 @@ export const HowTo: React.FC = () => <section className="Tips" style={{ backgrou
         <hr/>
         <dt>FETCHING</dt>
         <dd>load data with <code>via</code> followed by the path</dd>
-        <code>find users whose name is Bret via /users</code>
+        <code>find users via /users whose name is Bret</code>
         <hr/>
         <dt>JOINING</dt>
         <dd>meld table data together with <code>find ... and ...`</code></dd>

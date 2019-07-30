@@ -1,7 +1,8 @@
 import React from 'react';
 import capitalism from "../../Aeql/util/capitalism";
-import { Entity } from "../../Aeql/Aeql";
 import './EntityTable.scss';
+import { Entity } from '../../Aeql/Values';
+
 
 export const EntityTable: React.FC<{ collectionName?: string, models: Entity[] }> = (props) => {
   let { models } = props;

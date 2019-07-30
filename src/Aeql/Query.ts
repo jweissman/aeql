@@ -20,28 +20,65 @@ export class IntegerLiteral implements QueryElement {
     getValue() { return this.value; }
 }
 
+export class HttpVehicle {
+    constructor(public url: string) {}
+    getUrl() { return this.url; }
+    describe(): String {
+        return this.url;
+    }
+}
+
+export class Resource implements QueryElement {
+    
+    static of(nameValue: string) {
+        return new Resource(
+            new Identifier(nameValue)
+        );
+    }
+
+    constructor(private identifier: Identifier, private via?: HttpVehicle) { }
+    describe(): string {
+        if (this.via) {
+            return `${this.identifier.describe()} via ${this.via.describe()}`;
+        } else {
+            return this.identifier.describe();
+        }
+    }
+
+    getName() {
+        return this.identifier.getValue();
+    }
+
+    hasVehicle() {
+        return !!this.via;
+    }
+
+    getVehicle() {
+        return this.via;
+    }
+
+}
+
 export class Subject implements QueryElement {
     static of(nameValue: string) {
-        return new Subject(
-            [ new Identifier(nameValue) ]
-        );
+        return new Subject([ Resource.of(nameValue) ]);
     }
 
     static project(nameValue: string, projectValues: string[]) {
         return new Subject(
-            [ new Identifier(nameValue) ],
+            [ Resource.of(nameValue) ],
             projectValues.map(project => new Identifier(project)),
         )
     }
 
     static join(...resourceNames: string[]) {
         return new Subject(
-            resourceNames.map(resourceName => new Identifier(resourceName))
+            resourceNames.map(resourceName => Resource.of(resourceName))
         );
     }
 
     constructor(
-        private resources: Identifier[] = [],
+        private resources: Resource[] = [],
         private projections: Identifier[] = []
     ) { }
 
@@ -50,12 +87,13 @@ export class Subject implements QueryElement {
     }
 
     describe() {
-        let resourceDescription = this.resources.map(res => res.getValue()).join(' and ');
+        let resourceDescription = this.resources.
+            map(res => res.getName()).join(' and ');
 
         if (this.projections.length) {
-            return this.projections.map(project => project.describe()).join(", ")
-                + ` of ${resourceDescription}`;
-
+            return this.projections.map(project =>
+                project.describe()
+            ).join(", ") + ` of ${resourceDescription}`;
         } else {
             return resourceDescription;
         }
@@ -95,28 +133,14 @@ export class Ordering implements QueryElement {
     }
 }
 
-export class HttpVehicle {
-    constructor(public url: string) {}
 
-}
-
-export class Via implements QueryElement {
-    constructor(private vehicle: HttpVehicle) {} 
-    describe() {
-        return `${this.vehicle.url}`
-    }
-
-    getUrl(): any {
-        return this.vehicle.url
-    }
-}
 
 export class Query {
     constructor(
         public subject: Subject,
         public order?: Ordering,
         public conditions?: Condition[],
-        public via?: Via
+        // public via?: Via
     ) {}
 
     describe() {
@@ -130,9 +154,9 @@ export class Query {
             ordering = `by ${this.order.describe()}`
         }
         let via = '';
-        if (this.via) {
-            via = `via ${this.via.describe()}`
-        }
+        // if (this.via) {
+        //     via = `via ${this.via.describe()}`
+        // }
         return `Find ${this.subject.describe()} ${ordering} ${conditions} ${via}`;
     }
 }

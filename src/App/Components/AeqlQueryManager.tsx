@@ -1,10 +1,10 @@
 import React, { Component, TextareaHTMLAttributes } from 'react';
 import { Query } from '../../Aeql/Query';
-import { Entity } from '../../Aeql/Aeql';
 import { EntityTable } from './EntityTable';
 import { AeqlQueryView } from './AeqlQueryView';
 import { aeql } from '../Services/Database';
 import { HowTo } from './HowTo';
+import { Entity } from '../../Aeql/Values';
 export type QueryState = {
   query: string,
   result: string,

@@ -1,6 +1,6 @@
 import React from 'react';
 import { EntityTable } from './EntityTable';
-import { Entity } from '../../Aeql/Aeql';
+import { Entity } from '../../Aeql/Values';
 
 export interface QueryViewProps {
   initialQuery?: string;

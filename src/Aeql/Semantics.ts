@@ -1,5 +1,5 @@
 import grammar from './Grammar';
-import { Query, Subject, Condition, Ordering, Identifier as Identifier, Via, HttpVehicle, IntegerLiteral } from './Query';
+import { Query, Subject, Condition, Ordering, Identifier as Identifier, IntegerLiteral, Resource, HttpVehicle } from './Query';
 import { Node } from 'ohm-js';
 
 const tree = {
@@ -7,16 +7,16 @@ const tree = {
     let entityTree = entity.tree()
     let queryElementsTree = elements.tree()
     let orderTree: Ordering | undefined = undefined;
-    let viaTree: Via | undefined = undefined;
+    // let viaTree: Via | undefined = undefined;
     let conditionsTree: Condition[] = []
     if (queryElementsTree instanceof Array) {
       queryElementsTree.forEach(element => {
         if (element instanceof Ordering) {
           if (orderTree) { throw new Error("Can't have multiple orderings") }
           orderTree = element;
-        } else if (element instanceof Via) {
-          if (viaTree) { throw new Error("Can't have multiple vehicles (vias)") }
-          viaTree = element;
+        // } else if (element instanceof Via) {
+        //   if (viaTree) { throw new Error("Can't have multiple vehicles (vias)") }
+        //   viaTree = element;
         } else if (element instanceof Array && element.length && 
             element[0] instanceof Condition) { 
           if (conditionsTree.length) { throw new Error("Can't have multiple conditions") }
@@ -25,7 +25,7 @@ const tree = {
         }
       })
     }
-    let q = new Query(entityTree, orderTree, conditionsTree, viaTree)
+    let q = new Query(entityTree, orderTree, conditionsTree) //, viaTree)
     return q
   },
 
@@ -39,7 +39,13 @@ const tree = {
     return proj
   },
 
-  // Resource_join: (first: Node, _and)
+  Resource_vehicle: (id: Node, _via: Node, vehicle: Node) => {
+    return new Resource(id.tree(), vehicle.tree())
+  },
+
+  Resource_basic: (id: Node) => {
+    return new Resource(id.tree())
+  },
 
   Criteria: (_where: Node, conditions: Node) => conditions.tree(),
 
@@ -52,11 +58,6 @@ const tree = {
     let orderTree = order.tree()
     let ordering = new Ordering(orderTree)
     return ordering;
-  },
-
-  Via: (_via: Node, vehicle: Node) => {
-    let theVia = new Via(vehicle.tree());
-    return theVia;
   },
 
   Vehicle: (_slash: Node, url: Node) => {

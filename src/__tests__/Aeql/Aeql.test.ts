@@ -1,5 +1,5 @@
 import Aeql from '../../Aeql'
-import { HttpVehicle, Subject } from '../../Aeql/Query';
+import { Subject, HttpVehicle } from '../../Aeql/Query';
 
 describe('Aeql', () => {
     let codd = { id: 1, name: 'Codd', age: 41 }
@@ -93,8 +93,21 @@ describe('Aeql', () => {
         it("queries via uri", () => {
             let queryString: string = 'find users via /users'
             let q = aeql.interpret(queryString)
-            expect(q.subject).toEqual(Subject.of('users'))
-            expect(q.via).toEqual({ vehicle: new HttpVehicle('/users') })
+            console.log({ resources: q.subject.getResources() })
+            let resource = q.subject.getResources()[0]
+            expect(resource.getName()).toEqual('users')
+            let vehicle = resource.getVehicle();
+            expect(vehicle).toEqual(new HttpVehicle('/users'))
+        })
+
+        it("queries via several uris", () => {
+            let queryString: string = 'find users via /users and posts via /posts'
+            let q = aeql.interpret(queryString)
+            let resources = q.subject.getResources();
+            expect(resources[0].getName()).toEqual('users')
+            expect(resources[0].getVehicle()).toEqual(new HttpVehicle('/users'))
+            expect(resources[1].getName()).toEqual('posts')
+            expect(resources[1].getVehicle()).toEqual(new HttpVehicle('/posts'))
         })
 
         test.todo('queries with joins')
@@ -131,12 +144,14 @@ describe('Aeql', () => {
 
         it('naturally joins', async () => {
             let res = await aeql.resolve('find humans and experiments');
-            expect(res).toEqual([{ id: 1, name: 'Codd', age: 41, subject: 'Database Science' }]);
+            expect(res).toEqual([{
+                id: 1, human_id: 1, name: 'Codd', age: 41, subject: 'Database Science'
+            }]);
 
             res = await aeql.resolve('find experiments and humans');
             expect(res).toEqual([
                 { id: 1, human_id: 1, name: 'Codd', age: 41, subject: 'Database Science' },
-                { id: 1, human_id: 1, name: 'Codd', age: 41, subject: 'Abstract Algebrae' },
+                { id: 2, human_id: 1, name: 'Codd', age: 41, subject: 'Abstract Algebrae' },
             ]);
         })
 
