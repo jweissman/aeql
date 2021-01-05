@@ -5,7 +5,7 @@
   "homepage": "https://jweissman.github.io/aeql/",
   "dependencies": {
     "@types/pluralize": "^0.0.29",
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "detect-node": "^2.0.4",
     "node-sass": "^4.12.0",
     "ohm-js": "^0.14.0",
